@@ -1,6 +1,6 @@
-Render URL: 
-
-timestamp api endpoint: http://localhost:9000/timestamp
+Render URL: https://nodejs-timestamp.onrender.com/timestamp
 
 Github URL:https://github.com/karthiktr27597/nodejs-timestamptask
+
+last committed: "textfileupdated"
 
