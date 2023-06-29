@@ -2,12 +2,10 @@ const express = require("express")
 const fs = require("fs")
 const path = require("path");
 const dirPath = path.join(__dirname, "timestamp")
+console.log(dirPath);
 const app = express();
 
-
-// const date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-
-// timestamp api end point
+// Task 1 : API endpoint to create a textfile in perticular folder
 
 app.get("/timestamp", (req, res) => {
 
@@ -17,18 +15,36 @@ app.get("/timestamp", (req, res) => {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var timestamp = `timestamp:${Date.now()}\ndate-time:${date} ${time}`
 
-    fs.writeFileSync(`${path.join(dirPath, "current date-time.txt")}`, timestamp, (err) => {
+    let [day, d] = date.split(",");
+    d = d.trim().split(" ").join("")
+    let t = time.split(":").join("")
+
+    let filename = d + "-" + t;
+
+    fs.writeFileSync(`${dirPath}/${filename}.txt`, timestamp, (err) => {
 
         if (err) {
-            console.log(err)
-        } else {
-            console.log('file updated successfully')
+            console.log(err);
         }
     })
 
-    res.sendFile(path.join(dirPath, "current date-time.txt"))
+    res.send(timestamp)
 })
 
+// Task 2: API endpoint to retrieve created file with use of foldername
+
+app.get("/timestamp/:textFileName", (req, res) => {
+
+    try {
+        let { textFileName } = req.params;
+        textFileName = textFileName + ".txt";
+
+        return res.status(200).sendFile(path.join(dirPath, textFileName));
+    }
+    catch (err) {
+        res.status(500).send({ Message: "textFileName Error or incorrect input" })
+    }
+})
 
 
 // listen and start http server in specific port
